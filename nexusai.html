@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusAI — Intelligence Beyond Boundaries</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Three.js CDN (r128) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- GSAP CDN (3.12) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-obsidian: #030712;
+            --neon-cyan: #06b6d4;
+            --electric-indigo: #6366f1;
+            --glowing-purple: #a855f7;
+            --hot-pink: #ec4899;
+            --glass-bg: rgba(15, 23, 42, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: #f8fafc;
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--neon-cyan), var(--glowing-purple));
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--hot-pink);
+        }
+
+        /* Glassmorphism base utility */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel-glow {
+            position: relative;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel-glow:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.25), inset 0 0 15px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Glowing Gradient Text Shimmer */
+        .text-gradient-shimmer {
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #f472b6, #38bdf8);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 6s linear infinite;
+        }
+
+        @keyframes textShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(12px) rotate(-1deg); }
+        }
+
+        .animate-float {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+            animation: floatReverse 7s ease-in-out infinite 1s;
+        }
+
+        /* Glowing Rotating Border */
+        .gradient-border-card {
+            position: relative;
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .gradient-border-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                var(--neon-cyan) 60deg,
+                var(--electric-indigo) 120deg,
+                transparent 180deg,
+                var(--hot-pink) 240deg,
+                var(--glowing-purple) 300deg,
+                transparent 360deg
+            );
+            animation: rotateBorder 8s linear infinite;
+            z-index: -2;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .gradient-border-card:hover::before {
+            opacity: 1;
+        }
+
+        .gradient-border-card::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            background: rgba(11, 15, 26, 0.92);
+            border-radius: calc(1rem - 1px);
+            z-index: -1;
+        }
+
+        @keyframes rotateBorder {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Clip-path Cyber Tech Button */
+        .btn-cyber {
+            position: relative;
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+            color: #ffffff;
+            font-weight: 600;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-cyber:hover {
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-cyber-outline {
+            position: relative;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            color: #38bdf8;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-cyber-outline:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(6, 182, 212, 0.15);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* 3D Perspective Card Tilt Setup */
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.1s ease-out;
+        }
+
+        .tilt-card-content {
+            transform: translateZ(30px);
+        }
+
+        /* Pulse Dot */
+        .pulse-led {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981, 0 0 20px #10b981;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+        }
+
+        /* Code syntax highlighting simulation */
+        .code-keyword { color: #f472b6; }
+        .code-func { color: #38bdf8; }
+        .code-string { color: #34d399; }
+        .code-comment { color: #64748b; font-style: italic; }
+        .code-number { color: #fbbf24; }
+
+        /* Canvas Overlay Container */
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-[#030712] text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- Canvas Background layer for Three.js -->
+    <div id="canvas-container">
+        <canvas id="hero-canvas"></canvas>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4">
+        <nav class="max-w-7xl mx-auto glass-panel rounded-2xl px-6 py-3.5 flex items-center justify-between border border-slate-800/80">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-600 flex items-center justify-center p-[1px] shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-300">
+                    <div class="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
+                        <i data-lucide="cpu" class="w-5 h-5 text-cyan-400 group-hover:rotate-180 transition-transform duration-700"></i>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-cyan-400">NEXUS<span class="text-cyan-400">AI</span></span>
+                    <span class="text-[9px] tracking-widest text-cyan-500/80 font-mono -mt-1">NEURAL MESH OS</span>
+                </div>
+            </a>
+
+            <!-- Nav Links -->
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-300">
+                <a href="#features" class="hover:text-cyan-400 transition-colors relative py-1 group">
+                    Features
+                    <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#architecture" class="hover:text-cyan-400 transition-colors relative py-1 group">
+                    Architecture
+                    <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#showcase" class="hover:text-cyan-400 transition-colors relative py-1 group">
+                    Live Demo
+                    <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#metrics" class="hover:text-cyan-400 transition-colors relative py-1 group">
+                    Performance
+                    <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="flex items-center gap-4">
+                <button onclick="triggerToast('Connecting to Nexus Cluster v2.0...')" class="btn-cyber px-5 py-2.5 text-sm flex items-center gap-2">
+                    <span>Launch App</span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+
+            <!-- Left Hero Content -->
+            <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                <!-- Pill Release Badge -->
+                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 text-xs text-cyan-300">
+                    <span class="pulse-led"></span>
+                    <span class="font-mono tracking-wide">NexusAI Architecture v2.0 Live</span>
+                    <span class="text-slate-500">|</span>
+                    <span class="text-slate-400 hover:text-white cursor-pointer flex items-center gap-1" onclick="triggerToast('Downloading Architecture Whitepaper...')">
+                        Whitepaper <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    </span>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1]">
+                    Intelligence <br />
+                    <span class="text-gradient-shimmer">Beyond Boundaries</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-lg sm:text-xl text-slate-300 max-w-2xl font-normal leading-relaxed mx-auto lg:mx-0">
+                    Deploy autonomous neural models across an interconnected decentralized edge grid. Experience real-time inference with sub-millisecond global latency.
+                </p>
+
+                <!-- Dual CTAs -->
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                    <button onclick="triggerToast('Initializing Neural Instance Sandbox...')" class="btn-cyber w-full sm:w-auto px-8 py-4 text-base flex items-center justify-center gap-3">
+                        <span>Get Started Free</span>
+                        <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+                    </button>
+                    <a href="#showcase" class="btn-cyber-outline w-full sm:w-auto px-8 py-4 text-base flex items-center justify-center gap-3">
+                        <span>Explore Architecture</span>
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <!-- Trust stats row -->
+                <div class="pt-8 border-t border-slate-800/80 flex flex-wrap items-center justify-center lg:justify-start gap-8 text-slate-400 text-xs font-mono">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
+                        <span>SOC2 TYPE II CERTIFIED</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="lock" class="w-4 h-4 text-purple-400"></i>
+                        <span>ZERO-KNOWLEDGE ENCRYPTION</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                        <span>99.99% GUARANTEED UPTIME</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Interactive Dynamic Micro-Badges Floating Layer -->
+            <div class="lg:col-span-5 relative h-[420px] sm:h-[480px] w-full flex items-center justify-center">
+                <!-- Floating Glass Micro-Badge 1 (Top Left) -->
+                <div class="absolute top-4 left-2 sm:left-4 glass-panel p-4 rounded-2xl animate-float max-w-[200px] border-cyan-500/30 z-20 cursor-pointer hover:scale-105 transition-transform">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                            <i data-lucide="zap" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 font-mono uppercase">Global Latency</div>
+                            <div class="text-base font-bold text-white font-mono">0.32 ms</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Glass Micro-Badge 2 (Top Right) -->
+                <div class="absolute top-16 right-2 sm:right-4 glass-panel p-4 rounded-2xl animate-float-delayed max-w-[220px] border-indigo-500/30 z-20 cursor-pointer hover:scale-105 transition-transform">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                            <i data-lucide="cpu" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 font-mono uppercase">Active Parameters</div>
+                            <div class="text-base font-bold text-white font-mono">1.2 Trillion</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Glass Micro-Badge 3 (Bottom Left) -->
+                <div class="absolute bottom-12 left-4 glass-panel p-4 rounded-2xl animate-float-delayed max-w-[210px] border-purple-500/30 z-20 cursor-pointer hover:scale-105 transition-transform">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 font-mono uppercase">Security Spec</div>
+                            <div class="text-sm font-bold text-white">Post-Quantum</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Glass Micro-Badge 4 (Bottom Right) -->
+                <div class="absolute bottom-4 right-2 sm:right-6 glass-panel p-4 rounded-2xl animate-float max-w-[200px] border-pink-500/30 z-20 cursor-pointer hover:scale-105 transition-transform">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-pink-500/10 text-pink-400 border border-pink-500/20">
+                            <i data-lucide="network" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 font-mono uppercase">Edge Nodes</div>
+                            <div class="text-base font-bold text-white font-mono">8,420 Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 px-4 sm:px-6 relative z-10 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <h2 class="text-xs font-mono uppercase tracking-widest text-cyan-400">Architectural Breakthroughs</h2>
+            <h3 class="text-3xl sm:text-5xl font-extrabold tracking-tight">Engineered for Hyper-Scale Inference</h3>
+            <p class="text-slate-400 text-base sm:text-lg">
+                NexusAI breaks traditional hardware bottlenecks with autonomous matrix compute, streaming vector pipelines, and real-time mesh routing.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <!-- Card 1 -->
+            <div class="gradient-border-card tilt-card cursor-pointer group" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="p-8 h-full flex flex-col justify-between space-y-6 tilt-card-content">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
+                            <i data-lucide="cpu" class="w-7 h-7"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Quantum Neural Engine</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Parallel tensor matrix acceleration capable of sub-nanosecond synapsis calculations across distributed hardware clusters.
+                        </p>
+                    </div>
+                    <ul class="text-xs font-mono text-slate-400 space-y-2 pt-4 border-t border-slate-800">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400"></i> FP8 Matrix Operations</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400"></i> Dynamic Memory Pruning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="gradient-border-card tilt-card cursor-pointer group" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="p-8 h-full flex flex-col justify-between space-y-6 tilt-card-content">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:bg-indigo-500 group-hover:text-slate-950 transition-all duration-300">
+                            <i data-lucide="network" class="w-7 h-7"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">Autonomous Edge Mesh</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Self-balancing peer-to-peer node topology that intelligently reroutes inference requests based on instant packet latency.
+                        </p>
+                    </div>
+                    <ul class="text-xs font-mono text-slate-400 space-y-2 pt-4 border-t border-slate-800">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-400"></i> Zero Latency Overhead</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-400"></i> Peer Discovery v4</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="gradient-border-card tilt-card cursor-pointer group" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="p-8 h-full flex flex-col justify-between space-y-6 tilt-card-content">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-slate-950 transition-all duration-300">
+                            <i data-lucide="lock" class="w-7 h-7"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">Self-Healing Cryptography</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Lattice-based encryption ensuring zero-knowledge privacy for model weights and real-time data streaming payloads.
+                        </p>
+                    </div>
+                    <ul class="text-xs font-mono text-slate-400 space-y-2 pt-4 border-t border-slate-800">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400"></i> Post-Quantum Standard</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400"></i> Encrypted Enclaves</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="gradient-border-card tilt-card cursor-pointer group" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                <div class="p-8 h-full flex flex-col justify-between space-y-6 tilt-card-content">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 group-hover:bg-pink-500 group-hover:text-slate-950 transition-all duration-300">
+                            <i data-lucide="sparkles" class="w-7 h-7"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-pink-400 transition-colors">Real-Time Vector Pipeline</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Continuous high-dimensional vector search processing 5 Million+ queries per second with dynamic index updates.
+                        </p>
+                    </div>
+                    <ul class="text-xs font-mono text-slate-400 space-y-2 pt-4 border-t border-slate-800">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-pink-400"></i> Sub-millisecond KNN</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-pink-400"></i> Auto Index Sharding</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Interactive Showcase Section -->
+    <section id="showcase" class="py-24 px-4 sm:px-6 relative z-10 max-w-7xl mx-auto">
+        <div class="glass-panel rounded-3xl p-6 sm:p-10 border border-slate-800 bg-slate-950/80 shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                
+                <!-- Left Intro text -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-400">
+                        <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+                        <span>DEVELOPER FIRST API</span>
+                    </div>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Integrate Neural Mesh in 3 Lines of Code</h3>
+                    <p class="text-slate-400 text-base leading-relaxed">
+                        Connect your existing web apps, AI agents, or enterprise pipelines straight into our decentralized edge compute grid using our lightweight TypeScript SDK or Python Client.
+                    </p>
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</div>
+                            <span>Auto-scaling compute clusters across 40+ regions</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</div>
+                            <span>Built-in streaming responses with server-sent events</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-300">
+                            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</div>
+                            <span>Native support for Llama 3, Mistral, and custom PyTorch models</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Code Terminal Component -->
+                <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+                    <!-- Terminal Top Header -->
+                    <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                            <span class="text-xs font-mono text-slate-400 ml-2">nexus-orchestrator.ts</span>
+                        </div>
+                        
+                        <!-- Tab Switcher -->
+                        <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs font-mono">
+                            <button id="tab-ts" onclick="switchTab('ts')" class="px-3 py-1 rounded-md bg-cyan-500 text-slate-950 font-bold transition-all">TypeScript</button>
+                            <button id="tab-py" onclick="switchTab('py')" class="px-3 py-1 rounded-md text-slate-400 hover:text-white transition-all">Python</button>
+                            <button id="tab-curl" onclick="switchTab('curl')" class="px-3 py-1 rounded-md text-slate-400 hover:text-white transition-all">cURL</button>
+                        </div>
+                    </div>
+
+                    <!-- Code Body -->
+                    <div class="p-6 font-mono text-sm leading-relaxed overflow-x-auto text-slate-300 min-h-[260px]">
+                        <pre id="code-content"><code><span class="code-comment">// Initialize Nexus Neural Client</span>
+<span class="code-keyword">import</span> { NexusClient } <span class="code-keyword">from</span> <span class="code-string">'@nexus-ai/sdk'</span>;
+
+<span class="code-keyword">const</span> nexus = <span class="code-keyword">new</span> <span class="code-func">NexusClient</span>({
+  apiKey: process.env.<span class="code-string">NEXUS_API_KEY</span>,
+  region: <span class="code-string">'global-edge-auto'</span>,
+});
+
+<span class="code-comment">// Execute dynamic multi-node inference</span>
+<span class="code-keyword">const</span> stream = <span class="code-keyword">await</span> nexus.<span class="code-func">inference</span>.<span class="code-func">stream</span>({
+  model: <span class="code-string">'nexus-v2-quantum'</span>,
+  prompt: <span class="code-string">'Synthesize autonomous multi-agent task workflow'</span>,
+  temperature: <span class="code-number">0.2</span>,
+});
+
+<span class="code-keyword">for await</span> (<span class="code-keyword">const</span> chunk <span class="code-keyword">of</span> stream) {
+  console.<span class="code-func">log</span>(chunk.delta);
+}</code></pre>
+                    </div>
+
+                    <!-- Terminal Footer -->
+                    <div class="bg-slate-950 px-6 py-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+                        <div class="flex items-center gap-2 text-emerald-400">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span>STATUS: 200 OK — 0.28ms</span>
+                        </div>
+                        <button onclick="copyCode()" class="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                            <span id="copy-text">Copy snippet</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Metrics Banner -->
+    <section id="metrics" class="py-20 px-4 sm:px-6 relative z-10 max-w-7xl mx-auto">
+        <div class="glass-panel rounded-3xl p-8 sm:p-12 border border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-800">
+                
+                <div class="space-y-2 pt-4 md:pt-0">
+                    <div class="text-4xl sm:text-6xl font-black font-mono text-cyan-400 tracking-tight" id="metric-uptime">0.00%</div>
+                    <div class="text-sm font-semibold uppercase tracking-wider text-slate-300">Uptime SLA Guaranteed</div>
+                    <p class="text-xs text-slate-500 font-mono">Distributed redundant failover grid</p>
+                </div>
+
+                <div class="space-y-2 pt-6 md:pt-0">
+                    <div class="text-4xl sm:text-6xl font-black font-mono text-indigo-400 tracking-tight" id="metric-queries">0.0B+</div>
+                    <div class="text-sm font-semibold uppercase tracking-wider text-slate-300">Daily Neural Inferences</div>
+                    <p class="text-xs text-slate-500 font-mono">Scaling across 140+ countries</p>
+                </div>
+
+                <div class="space-y-2 pt-6 md:pt-0">
+                    <div class="text-4xl sm:text-6xl font-black font-mono text-purple-400 tracking-tight" id="metric-latency">&lt;0.0ms</div>
+                    <div class="text-sm font-semibold uppercase tracking-wider text-slate-300">Median Edge Latency</div>
+                    <p class="text-xs text-slate-500 font-mono">Sub-nanosecond tensor routing</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner Section -->
+    <section class="py-20 px-4 sm:px-6 relative z-10 max-w-5xl mx-auto text-center">
+        <div class="glass-panel p-10 sm:p-16 rounded-3xl border border-cyan-500/30 bg-gradient-to-b from-slate-900/90 to-slate-950 relative overflow-hidden">
+            <div class="absolute -top-24 -left-24 w-60 h-60 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -right-24 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <h2 class="text-3xl sm:text-5xl font-black mb-6 tracking-tight">Ready to Deploy Autonomous Intelligence?</h2>
+            <p class="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg mb-8">
+                Join thousands of forward-thinking AI engineers building next-generation applications on the NexusAI mesh.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="triggerToast('Redirecting to Developer Console...')" class="btn-cyber px-8 py-4 text-base w-full sm:w-auto">
+                    Create Free Developer Account
+                </button>
+                <button onclick="triggerToast('Sales Representative Contacted!')" class="btn-cyber-outline px-8 py-4 text-base w-full sm:w-auto">
+                    Schedule Enterprise Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/90 relative z-10 pt-16 pb-12 px-4 sm:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
+            
+            <div class="md:col-span-2 space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-slate-950 font-bold">
+                        <i data-lucide="cpu" class="w-4 h-4"></i>
+                    </div>
+                    <span class="text-lg font-black tracking-wider text-white">NEXUS<span class="text-cyan-400">AI</span></span>
+                </div>
+                <p class="text-slate-400 text-sm max-w-sm leading-relaxed">
+                    Decentralized neural compute infrastructure powering real-time artificial general intelligence workloads worldwide.
+                </p>
+                <div class="flex items-center gap-3 pt-2">
+                    <div class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-2 text-xs text-emerald-400 font-mono">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Systems Operational</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h5 class="text-xs font-mono uppercase tracking-wider text-slate-300 mb-4">Architecture</h5>
+                <ul class="space-y-2.5 text-sm text-slate-400">
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Quantum Mesh</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Vector Engine</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Lattice Encryption</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Edge Nodes</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="text-xs font-mono uppercase tracking-wider text-slate-300 mb-4">Resources</h5>
+                <ul class="space-y-2.5 text-sm text-slate-400">
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Documentation</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">API Reference</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">System Status</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">GitHub Repository</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="text-xs font-mono uppercase tracking-wider text-slate-300 mb-4">Company</h5>
+                <ul class="space-y-2.5 text-sm text-slate-400">
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">About Us</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Careers <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded ml-1">Hiring</span></a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Security</a></li>
+                    <li><a href="#" class="hover:text-cyan-400 transition-colors">Contact Sales</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
+            <div>© 2026 NexusAI Technologies Inc. All rights reserved.</div>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-slate-400">Privacy Policy</a>
+                <a href="#" class="hover:text-slate-400">Terms of Service</a>
+                <button onclick="scrollToTop()" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all">
+                    <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Element -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 glass-panel px-5 py-3.5 rounded-xl border border-cyan-500/40 text-sm font-mono text-cyan-300 flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none shadow-2xl">
+        <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i>
+        <span id="toast-message">Notification message</span>
+    </div>
+
+    <!-- JavaScript Execution Block -->
+    <script>
+        window.onload = function() {
+            // Initialize Lucide icons
+            lucide.createIcons();
+
+            // -------------------------------------------------------------
+            // THREE.JS 3D SCENE INITIALIZATION
+            // -------------------------------------------------------------
+            const container = document.getElementById('canvas-container');
+            const canvas = document.getElementById('hero-canvas');
+
+            const scene = new THREE.Scene();
+            
+            // Camera setup
+            const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 7.5;
+
+            // WebGL Renderer setup
+            const renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // 1. Central Icosahedron Geometry with High Detail
+            const coreGeometry = new THREE.IcosahedronGeometry(2.1, 48);
+            
+            // Store original positions for deformation math
+            const posAttr = coreGeometry.attributes.position;
+            const originalPositions = posAttr.array.slice();
+
+            // Custom Metallic Material for Core
+            const coreMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x06b6d4,
+                emissive: 0x1e1b4b,
+                roughness: 0.1,
+                metalness: 0.9,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.1,
+                wireframe: false,
+                transparent: true,
+                opacity: 0.88
+            });
+
+            const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
+            scene.add(coreMesh);
+
+            // Core Inner Wireframe Overlay
+            const wireframeGeo = new THREE.IcosahedronGeometry(2.15, 8);
+            const wireframeMat = new THREE.MeshBasicMaterial({
+                color: 0x818cf8,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.25
+            });
+            const wireframeMesh = new THREE.Mesh(wireframeGeo, wireframeMat);
+            scene.add(wireframeMesh);
+
+            // 2. Orbital Torus Rings
+            const ring1Geo = new THREE.TorusGeometry(3.6, 0.02, 16, 120);
+            const ring1Mat = new THREE.MeshStandardMaterial({
+                color: 0xec4899,
+                emissive: 0xec4899,
+                emissiveIntensity: 0.8,
+                roughness: 0.2
+            });
+            const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
+            ring1.rotation.x = Math.PI / 3;
+            scene.add(ring1);
+
+            const ring2Geo = new THREE.TorusGeometry(4.3, 0.015, 16, 120);
+            const ring2Mat = new THREE.MeshStandardMaterial({
+                color: 0x06b6d4,
+                emissive: 0x06b6d4,
+                emissiveIntensity: 0.8,
+                roughness: 0.2
+            });
+            const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+            ring2.rotation.y = Math.PI / 4;
+            scene.add(ring2);
+
+            const ring3Geo = new THREE.TorusGeometry(5.0, 0.01, 16, 120);
+            const ring3Mat = new THREE.MeshBasicMaterial({
+                color: 0xa855f7,
+                transparent: true,
+                opacity: 0.4
+            });
+            const ring3 = new THREE.Mesh(ring3Geo, ring3Mat);
+            ring3.rotation.z = Math.PI / 6;
+            scene.add(ring3);
+
+            // 3. Dynamic Starfield Particle System
+            const particlesCount = 1200;
+            const particlesGeo = new THREE.BufferGeometry();
+            const positions = new Float32Array(particlesCount * 3);
+            const colors = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 30;
+                positions[i + 1] = (Math.random() - 0.5) * 30;
+                positions[i + 2] = (Math.random() - 0.5) * 30;
+
+                colors[i] = Math.random() > 0.5 ? 0.02 : 0.4;     // R
+                colors[i + 1] = Math.random() > 0.5 ? 0.71 : 0.4; // G
+                colors[i + 2] = 0.95;                            // B
+            }
+
+            particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particlesMat = new THREE.PointsMaterial({
+                size: 0.04,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.7
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
+            scene.add(particlesMesh);
+
+            // 4. Dynamic Lighting Setup
+            const ambientLight = new THREE.AmbientLight(0x0f172a, 1.5);
+            scene.add(ambientLight);
+
+            const pointLightCyan = new THREE.PointLight(0x06b6d4, 4, 20);
+            pointLightCyan.position.set(6, 6, 6);
+            scene.add(pointLightCyan);
+
+            const pointLightMagenta = new THREE.PointLight(0xec4899, 3, 20);
+            pointLightMagenta.position.set(-6, -6, -6);
+            scene.add(pointLightMagenta);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            dirLight.position.set(0, 10, 5);
+            scene.add(dirLight);
+
+            // Mouse Inertia Movement Tracking
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - window.innerWidth / 2) * 0.001;
+                mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
+            });
+
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Render Loop
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                const elapsedTime = clock.getElapsedTime();
+
+                // Smooth mouse inertia lerp
+                targetX += (mouseX - targetX) * 0.05;
+                targetY += (mouseY - targetY) * 0.05;
+
+                // Deform Core Mesh Vertices dynamically
+                const positionsArray = coreGeometry.attributes.position.array;
+                const count = coreGeometry.attributes.position.count;
+
+                for (let i = 0; i < count; i++) {
+                    const u = i * 3;
+                    const ox = originalPositions[u];
+                    const oy = originalPositions[u + 1];
+                    const oz = originalPositions[u + 2];
+
+                    // Combined wave math for plasma dynamic surface
+                    const distance = Math.sqrt(ox * ox + oy * oy + oz * oz);
+                    const wave = Math.sin(distance * 3 - elapsedTime * 2.5) * 0.08 + Math.cos(oy * 4 + elapsedTime * 1.5) * 0.05;
+
+                    positionsArray[u] = ox * (1 + wave);
+                    positionsArray[u + 1] = oy * (1 + wave);
+                    positionsArray[u + 2] = oz * (1 + wave);
+                }
+                coreGeometry.attributes.position.needsUpdate = true;
+                coreGeometry.computeVertexNormals();
+
+                // Rotations
+                coreMesh.rotation.y = elapsedTime * 0.15 + targetX * 2;
+                coreMesh.rotation.x = elapsedTime * 0.1 + targetY * 2;
+
+                wireframeMesh.rotation.y = -elapsedTime * 0.2;
+                wireframeMesh.rotation.x = elapsedTime * 0.15;
+
+                ring1.rotation.x = elapsedTime * 0.3 + targetY;
+                ring1.rotation.y = elapsedTime * 0.2 + targetX;
+
+                ring2.rotation.y = -elapsedTime * 0.25 - targetX;
+                ring2.rotation.z = elapsedTime * 0.2;
+
+                ring3.rotation.z = elapsedTime * 0.15;
+                ring3.rotation.x = -elapsedTime * 0.2;
+
+                particlesMesh.rotation.y = elapsedTime * 0.03;
+
+                // Camera subtle movement
+                camera.position.x += (targetX * 2 - camera.position.x) * 0.05;
+                camera.position.y += (-targetY * 2 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+            
+            // Initialize GSAP scroll animations
+            initGSAP();
+        };
+
+        // -------------------------------------------------------------
+        // INTERACTIVE 3D TILT EFFECT FOR CARDS
+        // -------------------------------------------------------------
+        function handleTilt(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -12;
+            const rotateY = ((x - centerX) / centerX) * 12;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        }
+
+        function resetTilt(card) {
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        }
+
+        // -------------------------------------------------------------
+        // CODE TERMINAL TAB SWITCHER
+        // -------------------------------------------------------------
+        const codeSnippets = {
+            ts: `<span class="code-comment">// Initialize Nexus Neural Client</span>
+<span class="code-keyword">import</span> { NexusClient } <span class="code-keyword">from</span> <span class="code-string">'@nexus-ai/sdk'</span>;
+
+<span class="code-keyword">const</span> nexus = <span class="code-keyword">new</span> <span class="code-func">NexusClient</span>({
+  apiKey: process.env.<span class="code-string">NEXUS_API_KEY</span>,
+  region: <span class="code-string">'global-edge-auto'</span>,
+});
+
+<span class="code-comment">// Execute dynamic multi-node inference</span>
+<span class="code-keyword">const</span> stream = <span class="code-keyword">await</span> nexus.<span class="code-func">inference</span>.<span class="code-func">stream</span>({
+  model: <span class="code-string">'nexus-v2-quantum'</span>,
+  prompt: <span class="code-string">'Synthesize autonomous multi-agent task workflow'</span>,
+  temperature: <span class="code-number">0.2</span>,
+});
+
+<span class="code-keyword">for await</span> (<span class="code-keyword">const</span> chunk <span class="code-keyword">of</span> stream) {
+  console.<span class="code-func">log</span>(chunk.delta);
+}`,
+            py: `<span class="code-comment"># Initialize Nexus Python Async Engine</span>
+<span class="code-keyword">from</span> nexus_ai <span class="code-keyword">import</span> AsyncNexusClient
+
+<span class="code-keyword">async def</span> <span class="code-func">main</span>():
+    client = <span class="code-func">AsyncNexusClient</span>(api_key=<span class="code-string">"nx_live_9942a"</span>)
+    
+    response = <span class="code-keyword">await</span> client.nodes.<span class="code-func">execute</span>(
+        mesh_cluster=<span class="code-string">"us-east-edge"</span>,
+        vectors=[<span class="code-number">0.12</span>, <span class="code-number">0.98</span>, -<span class="code-number">0.45</span>, <span class="code-number">0.77</span>],
+        top_k=<span class="code-number">5</span>
+    )
+    <span class="code-keyword">print</span>(f<span class="code-string">"Cluster latency: {response.latency_ms}ms"</span>)`,
+            curl: `<span class="code-comment"># Dynamic Edge Inference cURL HTTP/3 Request</span>
+curl -X POST https://api.nexus.ai/v2/inference \\
+  -H <span class="code-string">"Authorization: Bearer nx_live_9942a"</span> \\
+  -H <span class="code-string">"Content-Type: application/json"</span> \\
+  -d <span class="code-string">'{
+    "model": "nexus-v2-quantum",
+    "prompt": "Optimize high-frequency trading pipeline",
+    "max_tokens": 512
+  }'</span>`
+        };
+
+        function switchTab(tab) {
+            ['ts', 'py', 'curl'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    btn.className = "px-3 py-1 rounded-md bg-cyan-500 text-slate-950 font-bold transition-all";
+                } else {
+                    btn.className = "px-3 py-1 rounded-md text-slate-400 hover:text-white transition-all";
+                }
+            });
+            document.getElementById('code-content').innerHTML = codeSnippets[tab];
+        }
+
+        // Copy Code utility with fallback
+        function copyCode() {
+            const rawText = document.getElementById('code-content').innerText;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(rawText);
+            } else {
+                const dummy = document.createElement("textarea");
+                document.body.appendChild(dummy);
+                dummy.value = rawText;
+                dummy.select();
+                document.execCommand("copy");
+                document.body.removeChild(dummy);
+            }
+            triggerToast('Snippet copied to clipboard!');
+        }
+
+        // -------------------------------------------------------------
+        // GSAP & NUMERIC COUNTER ANIMATIONS
+        // -------------------------------------------------------------
+        function initGSAP() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Metric counter triggers
+            let counterTriggered = false;
+
+            ScrollTrigger.create({
+                trigger: "#metrics",
+                start: "top 80%",
+                onEnter: () => {
+                    if (!counterTriggered) {
+                        counterTriggered = true;
+                        animateCounters();
+                    }
+                }
+            });
+        }
+
+        function animateCounters() {
+            // Counter 1: Uptime
+            let uptimeObj = { val: 0 };
+            gsap.to(uptimeObj, {
+                val: 99.99,
+                duration: 2.5,
+                ease: "power2.out",
+                onUpdate: () => {
+                    document.getElementById('metric-uptime').innerText = uptimeObj.val.toFixed(2) + '%';
+                }
+            });
+
+            // Counter 2: Daily Queries
+            let queriesObj = { val: 0 };
+            gsap.to(queriesObj, {
+                val: 10.4,
+                duration: 2.5,
+                ease: "power2.out",
+                onUpdate: () => {
+                    document.getElementById('metric-queries').innerText = queriesObj.val.toFixed(1) + 'B+';
+                }
+            });
+
+            // Counter 3: Latency
+            let latencyObj = { val: 5.0 };
+            gsap.to(latencyObj, {
+                val: 0.8,
+                duration: 2.5,
+                ease: "power2.out",
+                onUpdate: () => {
+                    document.getElementById('metric-latency').innerText = '<' + latencyObj.val.toFixed(1) + 'ms';
+                }
+            });
+        }
+
+        // Toast Notification Trigger
+        function triggerToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            toastMsg.innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Smooth Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
